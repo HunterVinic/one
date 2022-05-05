@@ -7,6 +7,8 @@ import 'package:one/views/register_view.dart';
 import 'package:one/views/verify_email_view.dart';
 import 'dart:developer' as devtools show log;
 
+import 'constants/routes.dart';
+
 
 
 void main(){
@@ -19,9 +21,10 @@ void main(){
     ),
     home: const HomePage(),
     routes: {
-      '/login/': (context) =>const LoginView(),
-      '/register/': (context) =>const RegisterView(),
-      '/notes/': (context) =>const NotesView(),
+      loginRoute : (context) =>const LoginView(),
+      registerRoute: (context) =>const RegisterView(),
+      notesRoute: (context) =>const NotesView(),
+
     },
   ),
   );
@@ -78,7 +81,7 @@ class _NotesViewState extends State<NotesView> {
                  if (shouldLogout) {
                    await FirebaseAuth.instance.signOut();
                    Navigator.of(context).pushNamedAndRemoveUntil(
-                       '/login/',
+                     loginRoute,
                            (_) => false,
                    );
                  }
