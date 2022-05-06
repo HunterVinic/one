@@ -24,6 +24,8 @@ void main(){
       loginRoute : (context) =>const LoginView(),
       registerRoute: (context) =>const RegisterView(),
       notesRoute: (context) =>const NotesView(),
+      verifyEmailRoute: (context) =>const VerifyEmailView(),
+
 
     },
   ),
@@ -41,7 +43,7 @@ class  HomePage extends StatelessWidget {
       builder: (context, snapshot){
         switch(snapshot.connectionState) {
           case ConnectionState.done:
-          final user = (FirebaseAuth.instance.currentUser);
+          final user = FirebaseAuth.instance.currentUser;
           if (user != null) {
             if (user.emailVerified) {
               return const NotesView();
@@ -52,7 +54,7 @@ class  HomePage extends StatelessWidget {
             return const LoginView();
         }
           default:
-            return const CircularProgressIndicator.adaptive();
+            return const CircularProgressIndicator();
          }
       },
     );
@@ -102,6 +104,7 @@ class _NotesViewState extends State<NotesView> {
     );
   }
 }
+
 Future<bool> showLogOutDialog(BuildContext context){
    return showDialog<bool>(
       context: context,
