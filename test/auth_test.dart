@@ -1,4 +1,4 @@
-/*
+
 import 'package:flutter/material.dart';
 import 'package:one/services/auth/auth_exceptions.dart';
 import 'package:one/services/auth/auth_provider.dart';
@@ -41,7 +41,7 @@ group('Mock Authentication',(){
   );
   expect (badPasswordUser,
   throwsA(const TypeMatcher<WrongPasswordAuthException>()));
-  
+
   final user = await provider.createUser(
       email: 'foo',
       password: 'bar',
@@ -106,7 +106,7 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     if (email =='foo@bar.com') throw UserNotFoundAuthException();
     if(password == 'foobar') throw WrongPasswordAuthException();
-    const user = AuthUser(isEmailVerified:false, email: '');
+    const user = AuthUser(isEmailVerified:false, email: 'foo.@bar.com');
     _user = user;
     return Future.value(user);
   }
@@ -124,10 +124,9 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     final user = _user;
     if(user==null) throw UserNotFoundAuthException();
-    const newUser = AuthUser(isEmailVerified:true, email: '');
+    const newUser = AuthUser(isEmailVerified:true, email: 'foo@bar.com');
     _user = newUser;
 
   }
 
 }
-*/
