@@ -68,7 +68,6 @@ void _saveNoteIfTextNotEmpty()async{
     _textController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

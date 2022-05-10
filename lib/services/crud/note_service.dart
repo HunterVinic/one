@@ -225,11 +225,6 @@ if(results.isEmpty) {
     if (_db != null){
       throw DatabaseAlreadyOpenException();
     }
-    try{
-      final docsPath = await getApplicationDocumentsDirectory();
-    } on MissingPlatformDirectoryException{
-      throw UnableToGetDocumentsDirectory();
-    }
     try {
       final docsPath = await getApplicationDocumentsDirectory();
       final dbPath = join(docsPath.path, dbName);
