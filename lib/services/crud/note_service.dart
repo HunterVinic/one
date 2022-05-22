@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:one/extensions/list/filter.dart';
 import 'package:one/services/crud/crud_exceptions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -11,6 +12,7 @@ class DatabaseAlreadyOpenException implements Exception{}
 class NoteService{
   Database? _db;
   List<DatabaseNotes> _note = [];
+  DatabaseUser ? _user;
 
   static final NoteService _shared =NoteService._sharedInstance();
   NoteService._sharedInstance(){
@@ -24,14 +26,31 @@ class NoteService{
 
   late final StreamController<List<DatabaseNotes>>_noteStreamController;
 
-  Stream<List<DatabaseNotes>> get allNotes=> _noteStreamController.stream;
+  Stream<List<DatabaseNotes>> get allNotes=>
+      _noteStreamController.stream.filter((note){
+        final currentUser =_user;
+        if (currentUser !=null){
+           return note.userId == currentUser.id;
+        }else{
+          throw UserShouldBESetBeforeReadingAllNotes();
+        }
+      });
 
-  Future<DatabaseUser>getOrCreateUser({required String email})async{
+  Future<DatabaseUser>getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  })async{
     try {
       final user = await getUser(email: email);
+      if (setAsCurrentUser){
+        _user = user;
+      }
       return user;
     } on CouldNotFindUser{
       final createdUser = await createUser(email:email);
+      if (setAsCurrentUser){
+        _user = createdUser;
+      }
       return createdUser;
     } catch (e){
       rethrow;
@@ -57,7 +76,10 @@ class NoteService{
   final updatesCount = await db.update(noteTable,{
     textColumn: text,
     isSyncedWithCloudColumn:0,
-  });
+  },
+    where: 'id = ?',
+  whereArgs: [note.id],
+  );
 
   if (updatesCount == 0){
     throw CouldNotUpdateNote();
