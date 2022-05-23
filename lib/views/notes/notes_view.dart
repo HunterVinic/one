@@ -67,7 +67,7 @@ class _NotesViewState extends State<NotesView> {
               case ConnectionState.waiting:
               case ConnectionState.active:
                 if (snapshot.hasData) {
-                  final allNotes = snapshot.data as Iterable<CloudNote>;
+                  final allNotes = snapshot.data as List <CloudNote>;
                   return NoteListView(
                     notes: allNotes,
                     onDeleteNote: (note) async {
