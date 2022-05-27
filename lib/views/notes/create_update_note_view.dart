@@ -3,7 +3,6 @@ import 'package:one/services/auth/auth_service.dart';
 import 'package:one/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:one/utilities/generics/get_arguments.dart';
 import'package:one/services/cloud/cloud_note.dart';
-import'package:one/services/cloud/cloud_storage_exceptions.dart';
 import'package:one/services/cloud/firebase_cloud_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -52,7 +51,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return existingNote;
     }
     final currentUser = AuthService.firebase().currentUser!;
-    final email= currentUser.email!;
     final userId = currentUser.id;
     final newNote = await _noteService.createNewNote(ownerUserId: userId);
     _note = newNote;
